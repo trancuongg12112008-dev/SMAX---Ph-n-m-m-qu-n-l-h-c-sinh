@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SMAX - Phần mềm quản lý học sinh</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- Màn hình đăng nhập -->
+  <div id="login-screen" class="login-container">
+    <div class="login-box">
+      <h1>🎓 SMAX</h1>
+      <h2>Hệ thống quản lý học sinh</h2>
+      <form id="login-form">
+        <input type="text" id="username" placeholder="Tên đăng nhập" required>
+        <input type="password" id="password" placeholder="Mật khẩu" required>
+        <button type="submit" class="btn-primary">Đăng nhập</button>
+      </form>
+      <div class="login-info">
+        <p><strong>Tài khoản mặc định:</strong></p>
+        <p>Hiệu trưởng: <code>hieu_truong</code> / <code>123456</code></p>
+        <p>Hiệu phó: <code>hieu_pho</code> / <code>123456</code></p>
+        <p>Giáo viên: Dùng mã GV / mật khẩu (mặc định: 123456)</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Màn hình chính -->
+  <div id="main-screen" class="container" style="display:none;">
+    <header>
+      <div class="header-content">
+        <h1>🎓 SMAX - Hệ thống quản lý học sinh</h1>
+        <div class="user-info">
+          <span id="user-name"></span>
+          <button class="btn-logout" onclick="logout()">Đăng xuất</button>
+        </div>
+      </div>
+      <nav id="main-nav">
+        <button class="nav-btn active" data-tab="hoc-sinh">Học sinh</button>
+        <button class="nav-btn" data-tab="giao-vien">Giáo viên</button>
+        <button class="nav-btn" data-tab="mon-hoc">Môn học</button>
+        <button class="nav-btn" data-tab="phan-cong">Phân công</button>
+        <button class="nav-btn" data-tab="diem">Điểm số</button>
+      </nav>
+    </header>
+
+    <main>
+      <!-- Tab Học sinh -->
+      <div id="hoc-sinh" class="tab-content active">
+        <div class="section-header">
+          <h2>Quản lý học sinh</h2>
+          <button class="btn-primary" onclick="showAddStudentForm()">+ Thêm học sinh</button>
+        </div>
+        
+        <div id="student-form" class="form-container" style="display:none;">
+          <h3>Thêm học sinh mới</h3>
+          <form id="add-student-form">
+            <input type="text" id="ma_hs" placeholder="Mã học sinh (tự động nếu để trống)">
+            <input type="text" id="ho_ten" placeholder="Họ và tên *" required>
+            <input type="date" id="ngay_sinh" placeholder="Ngày sinh">
+            <select id="gioi_tinh">
+              <option value="">Giới tính</option>
+              <option value="Nam">Nam</option>
+              <option value="Nữ">Nữ</option>
+            </select>
+            <input type="text" id="lop" placeholder="Lớp">
+            <input type="text" id="dia_chi" placeholder="Địa chỉ">
+            <input type="text" id="sdt_phu_huynh" placeholder="SĐT phụ huynh">
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary" onclick="hideAddStudentForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <table id="students-table">
+            <thead>
+              <tr>
+                <th>Mã HS</th>
+                <th>Họ và tên</th>
+                <th>Ngày sinh</th>
+                <th>Giới tính</th>
+                <th>Lớp</th>
+                <th>SĐT phụ huynh</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Giáo viên -->
+      <div id="giao-vien" class="tab-content">
+        <div class="section-header">
+          <h2>Quản lý giáo viên</h2>
+          <button class="btn-primary" onclick="showAddTeacherForm()">+ Thêm giáo viên</button>
+        </div>
+        
+        <div id="teacher-form" class="form-container" style="display:none;">
+          <h3>Thêm giáo viên mới</h3>
+          <form id="add-teacher-form">
+            <input type="text" id="ma_gv" placeholder="Mã giáo viên *" required>
+            <input type="text" id="ho_ten_gv" placeholder="Họ và tên *" required>
+            <input type="text" id="mon_day" placeholder="Môn dạy *" required>
+            <input type="password" id="mat_khau_gv" placeholder="Mật khẩu (mặc định: 123456)">
+            <input type="text" id="chu_nhiem_lop" placeholder="Chủ nhiệm lớp (VD: 10A)">
+            <input type="text" id="sdt_gv" placeholder="Số điện thoại">
+            <input type="email" id="email" placeholder="Email">
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary" onclick="hideAddTeacherForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <table id="teachers-table">
+            <thead>
+              <tr>
+                <th>Mã GV</th>
+                <th>Họ và tên</th>
+                <th>Môn dạy</th>
+                <th>Chủ nhiệm</th>
+                <th>SĐT</th>
+                <th>Email</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Môn học -->
+      <div id="mon-hoc" class="tab-content">
+        <div class="section-header">
+          <h2>Quản lý môn học</h2>
+          <button class="btn-primary" onclick="showAddSubjectForm()">+ Thêm môn học</button>
+        </div>
+        
+        <div id="subject-form" class="form-container" style="display:none;">
+          <h3>Thêm môn học mới</h3>
+          <form id="add-subject-form">
+            <input type="text" id="ma_mon" placeholder="Mã môn *" required>
+            <input type="text" id="ten_mon" placeholder="Tên môn *" required>
+            <input type="number" id="so_tiet" placeholder="Số tiết" min="1">
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary" onclick="hideAddSubjectForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <table id="subjects-table">
+            <thead>
+              <tr>
+                <th>Mã môn</th>
+                <th>Tên môn</th>
+                <th>Số tiết</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Phân công -->
+      <div id="phan-cong" class="tab-content">
+        <div class="section-header">
+          <h2>Phân công giảng dạy</h2>
+          <button class="btn-primary" onclick="showAddAssignmentForm()">+ Thêm phân công</button>
+        </div>
+        
+        <div id="assignment-form" class="form-container" style="display:none;">
+          <h3>Phân công giảng dạy</h3>
+          <form id="add-assignment-form">
+            <select id="giao_vien_id" required>
+              <option value="">Chọn giáo viên *</option>
+            </select>
+            <select id="mon_hoc_id" required>
+              <option value="">Chọn môn học *</option>
+            </select>
+            <input type="text" id="lop_pc" placeholder="Lớp *" required>
+            <select id="thu" required>
+              <option value="">Chọn thứ *</option>
+              <option value="2">Thứ 2</option>
+              <option value="3">Thứ 3</option>
+              <option value="4">Thứ 4</option>
+              <option value="5">Thứ 5</option>
+              <option value="6">Thứ 6</option>
+              <option value="7">Thứ 7</option>
+            </select>
+            <input type="number" id="tiet" placeholder="Tiết bắt đầu *" min="1" max="10" required>
+            <input type="number" id="so_tiet" placeholder="Số tiết (1-5) *" min="1" max="5" value="1" required>
+            <input type="text" id="phong" placeholder="Phòng">
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary" onclick="hideAddAssignmentForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <table id="assignments-table">
+            <thead>
+              <tr>
+                <th>Giáo viên</th>
+                <th>Môn học</th>
+                <th>Lớp</th>
+                <th>Thứ</th>
+                <th>Tiết</th>
+                <th>Số tiết</th>
+                <th>Phòng</th>
+                <th id="action-header-pc">Thao tác</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Tab Điểm -->
+      <div id="diem" class="tab-content">
+        <div class="section-header">
+          <h2>Quản lý điểm số</h2>
+          <button class="btn-primary" onclick="showAddScoreForm()">+ Nhập điểm</button>
+        </div>
+        
+        <div id="score-form" class="form-container" style="display:none;">
+          <h3>Nhập điểm</h3>
+          <form id="add-score-form">
+            <select id="hoc_sinh_id" required>
+              <option value="">Chọn học sinh *</option>
+            </select>
+            <select id="mon_hoc_id_diem" required>
+              <option value="">Chọn môn học *</option>
+            </select>
+            <select id="loai_diem" required>
+              <option value="">Loại điểm *</option>
+              <option value="Miệng">Miệng</option>
+              <option value="15 phút">15 phút</option>
+              <option value="1 tiết">1 tiết</option>
+              <option value="Giữa kỳ">Giữa kỳ</option>
+              <option value="Cuối kỳ">Cuối kỳ</option>
+            </select>
+            <input type="number" id="diem_so" placeholder="Điểm *" min="0" max="10" step="0.25" required>
+            <select id="hoc_ky" required>
+              <option value="">Học kỳ *</option>
+              <option value="1">Học kỳ 1</option>
+              <option value="2">Học kỳ 2</option>
+            </select>
+            <input type="text" id="nam_hoc" placeholder="Năm học (VD: 2024-2025) *" required>
+            <input type="text" id="ghi_chu" placeholder="Ghi chú">
+            <div class="form-actions">
+              <button type="submit" class="btn-primary">Lưu</button>
+              <button type="button" class="btn-secondary" onclick="hideAddScoreForm()">Hủy</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="table-container">
+          <table id="scores-table">
+            <thead>
+              <tr>
+                <th>Học sinh</th>
+                <th>Môn học</th>
+                <th>Loại điểm</th>
+                <th>Điểm</th>
+                <th>Học kỳ</th>
+                <th>Năm học</th>
+                <th>Ghi chú</th>
+                <th>Thao tác</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
